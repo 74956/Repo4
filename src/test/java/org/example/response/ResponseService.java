@@ -7,7 +7,6 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.example.enums.Path;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -22,6 +21,7 @@ public class ResponseService {
         requestSpecification
                 .baseUri(Path.SITE_URL.getPath())
                 .contentType(ContentType.JSON)
+                .log().uri()
                 .when()
                 .get()
                 .then()
@@ -31,39 +31,24 @@ public class ResponseService {
         return requestSpecification.request(method);
     }
 
-    public static Response createModel(String path, Object model) {
+    public static Response sendModel(Method method, Path path, Object model) {
         RequestSpecification requestSpecification = given()
-                .basePath(path)
-                .body(model instanceof JSONObject ? model.toString()
-                        : GSON.toJson(model));
-        return getResponse(Method.POST, requestSpecification);
+                .basePath(path.getPath())
+                .body(GSON.toJson(model));
+        return getResponse(method, requestSpecification);
     }
 
-    public static Response getModelWithQueryParam(String path, Map<String, ? extends Serializable> map) {
+    public static Response sendModelWithQueryParam(Method method, Path path, Map<String, ? extends Serializable> map) {
         RequestSpecification requestSpecification = given()
-                .basePath(path);
+                .basePath(path.getPath());
         map.forEach(requestSpecification::queryParam);
-        return getResponse(Method.GET, requestSpecification);
+        return getResponse(method, requestSpecification);
     }
 
-    public static Response deleteModelWithQueryParam(String path, Map<String, ? extends Serializable> map) {
-        RequestSpecification requestSpecification = given()
-                .basePath(path);
-        map.forEach(requestSpecification::queryParam);
-        return getResponse(Method.DELETE, requestSpecification);
-    }
-
-    public static Response updateModel(String path, Object model) {
+    public static Response sendModel(Method method, String path, Object model) {
         RequestSpecification requestSpecification = given()
                 .basePath(path)
                 .body(GSON.toJson(model));
-        return getResponse(Method.PUT, requestSpecification);
-    }
-
-    public static Response updateModelPartly(String path, Object model) {
-        RequestSpecification requestSpecification = given()
-                .basePath(path)
-                .body(GSON.toJson(model));
-        return getResponse(Method.PATCH, requestSpecification);
+        return getResponse(method, requestSpecification);
     }
 }

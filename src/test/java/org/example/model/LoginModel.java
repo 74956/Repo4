@@ -8,7 +8,7 @@ public class LoginModel {
     private String email;
     private String password;
 
-    public static LoginModel generate(String email, String password) {
+    public static LoginModel generateModel(String email, String password) {
         LoginModel loginModel = new LoginModel();
         loginModel.setEmail(email);
         loginModel.setPassword(password);

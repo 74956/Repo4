@@ -8,7 +8,7 @@ public class RegisterModel {
     private String email;
     private String password;
 
-    public static RegisterModel generate(String email, String password) {
+    public static RegisterModel generateModel(String email, String password) {
         RegisterModel registerModel = new RegisterModel();
         registerModel.setEmail(email);
         registerModel.setPassword(password);

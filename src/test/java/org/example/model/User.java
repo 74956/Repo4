@@ -13,9 +13,9 @@ public class User {
     @EqualsAndHashCode.Exclude
     private String createdAt;
 
-    public static User generate(String name, String job) {
+    public static User generateModel(String name, String job) {
         User model = new User();
-        model.setJob(name);
+        model.setName(name);
         model.setJob(job);
         return model;
     }
